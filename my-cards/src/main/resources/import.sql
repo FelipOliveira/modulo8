@@ -1,0 +1,6 @@
+-- This file allow to write SQL commands that will be emitted in test and dev.
+-- The commands are commented as their support depends of the database
+-- insert into myentity (id, field) values(1, 'field-1');
+-- insert into myentity (id, field) values(2, 'field-2');
+ --insert into carta (nome, cor) values('Water Energy', 1);
+-- alter sequence carta_seq restart with 2;

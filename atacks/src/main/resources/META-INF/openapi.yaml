@@ -1,0 +1,108 @@
+openapi: 3.0.3
+
+info:
+  title: my-attack API
+  description: Open API documentation for my-attack API
+  version: 1.0.0-SNAPSHOT
+
+info:
+  title: attack API
+  version: 1.0.0-SNAPSHOT
+
+paths:
+  /ataque:
+    get:
+      tags:
+      - Ataque Controller
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Ataque'
+    post:
+      tags:
+      - Ataque Controller
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Ataque'
+      responses:
+        "201":
+          description: Created
+  /ataque/{id}:
+    get:
+      tags:
+      - Ataque Controller
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          format: int64
+          type: integer
+      responses:
+        "200":
+          description: OK
+    put:
+      tags:
+      - Ataque Controller
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          format: int64
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Ataque'
+      responses:
+        "204":
+          description: No Content
+    delete:
+      tags:
+      - Ataque Controller
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          format: int64
+          type: integer
+      responses:
+        "204":
+          description: No Content
+components:
+  schemas:
+    Ataque:
+      type: object
+      properties:
+        id:
+          format: int64
+          type: integer
+          readOnly: true
+        nome:
+          type: string
+        efeito:
+          $ref: '#/components/schemas/Efeito'
+        dano:
+          format: int32
+          type: integer
+        custo:
+          format: int32
+          type: integer
+    Efeito:
+      enum:
+      - NONE
+      - CONFUSION
+      - SLEEP
+      - POISON
+      - PARALYSIS
+      type: string

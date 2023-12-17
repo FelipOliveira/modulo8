@@ -1,0 +1,179 @@
+openapi: 3.0.3
+
+info:
+  title: my-cards API
+  description: Open API documentation for my-cards API
+  version: 1.0.0-SNAPSHOT
+
+paths:
+  /carta:
+    get:
+      summary: Retorna uma lista com todas as cartas cadastradas.
+      tags:
+      - Carta Controller
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Carta'
+  /carta/{id}:
+    get:
+      summary: Retorna uma carta com o ID indicado.
+      tags:
+      - Carta Controller
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          format: int64
+          type: integer
+      responses:
+        "200":
+          description: OK
+    delete:
+      summary: Apaga a carta com o ID especificado.
+      tags:
+      - Carta Controller
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          format: int64
+          type: integer
+      responses:
+        "204":
+          description: No Content
+  /energia:
+    post:
+      summary: Cadastra uma nova carta de Energia.
+      tags:
+      - Energia Controller
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Energia'
+      responses:
+        "201":
+          description: Created
+  /energia/{id}:
+    put:
+      summary: Edita a carta de Energia com o ID especificado.
+      tags:
+      - Energia Controller
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          format: int64
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Energia'
+      responses:
+        "204":
+          description: No Content
+  /pokemon:
+    post:
+      summary: Cadastra uma nova carta de Pokémon.
+      tags:
+      - Pokemon Controller
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Pokemon'
+      responses:
+        "201":
+          description: Created
+        "200":
+          description: OK
+  /pokemon/{id}:
+    put:
+      summary: Edita a carta de Pokémon com o ID especificado.
+      tags:
+      - Pokemon Controller
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          format: int64
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Pokemon'
+      responses:
+        "204":
+          description: No Content
+components:
+  schemas:
+    Carta:
+      type: object
+      properties:
+        id:
+          format: int64
+          type: integer
+        nome:
+          type: string
+        cor:
+          $ref: '#/components/schemas/Cor'
+    Cor:
+      enum:
+      - FIRE
+      - WATER
+      - GRASS
+      - LIGHTING
+      - FIGHTING
+      - PSYCHIC
+      - COLORLESS
+      type: string
+    Energia:
+      type: object
+      properties:
+        properties:
+        id:
+          format: int64
+          type: integer
+          readOnly: true
+        nome:
+          type: string
+        cor:
+          $ref: '#/components/schemas/Cor'
+        qtdEnergia:
+          format: int32
+          type: integer
+    Estagio:
+      enum:
+      - BASIC
+      - STAGE_1
+      - STAGE_2
+      type: string
+    Pokemon:
+      type: object
+      properties:
+        properties:
+        id:
+          format: int64
+          type: integer
+          readOnly: true
+        nome:
+          type: string
+        cor:
+          $ref: '#/components/schemas/Cor'
+        hp:
+          format: int32
+          type: integer
+        estagio:
+          $ref: '#/components/schemas/Estagio'
