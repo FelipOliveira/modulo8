@@ -1,4 +1,4 @@
-version: "2"
+version: '3.2'
 services:
 
   # Jaeger
@@ -20,3 +20,50 @@ services:
       - "55680:55680" # OTLP gRPC receiver alternative port
     depends_on:
       - jaeger-all-in-one
+
+  # GELF confuguration
+  elasticsearch:
+    image: elasticsearch:7.9.2
+    environment:
+      - discovery.type=single-node
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+  logstash:
+    image: logstash:7.9.2
+    environment:
+      - config.string='input{gelf{port => 12201}}output{stdout{}elasticsearch {hosts => ["http://elasticsearch:9200"]}}'
+    ports:
+      - "12201:12201/udp"
+      - "5000:5000"
+      - "9600:9600"
+  kibana:
+    image: kibana:7.9.2
+    ports:
+      - "5601:5601"
+  mongo:
+    image: mongo:4.0
+    networks:
+      - graylog
+
+  graylog:
+    image: graylog/graylog:4.3.0
+    ports:
+      - "9000:9000"
+      - "12501:12501/udp"
+      - "1514:1514"
+    environment:
+      GRAYLOG_HTTP_EXTERNAL_URI: "http://127.0.0.1:9000/"
+      # CHANGE ME (must be at least 16 characters)!
+      GRAYLOG_PASSWORD_SECRET: "forpasswordencryption"
+      # Password: admin
+      GRAYLOG_ROOT_PASSWORD_SHA2: "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918"
+    networks:
+      - graylog
+    depends_on:
+      - elasticsearch
+      - mongo
+
+networks:
+  graylog:
+    driver: bridge
